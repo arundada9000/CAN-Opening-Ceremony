@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ribbon Cutting</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+
+        .ribbon-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .ribbon {
+            position: absolute;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(to right, red, yellow);
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
+        }
+
+        .ribbon.cut {
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ribbon-container">
+        <div class="ribbon"></div>
+    </div>
+    <script>
+        const ribbon = document.querySelector('.ribbon');
+        let isCutting = false;
+
+        ribbon.addEventListener('mousemove', (e) => {
+            if (isCutting) {
+                const cutPoint = e.clientX;
+                const ribbonWidth = ribbon.offsetWidth;
+                const leftWidth = cutPoint;
+                const rightWidth = ribbonWidth - cutPoint;
+
+                ribbon.innerHTML = `
+            <div class="ribbon-left" style="width: ${leftWidth}px; float: left; height: 100%;"></div>
+            <div class="ribbon-right" style="width: ${rightWidth}px; float: right; height: 100%;"></div>
+        `;
+                ribbon.classList.add('cut');
+                ribbon.style.transform = `translateY(-50%) translate(${cutPoint - ribbonWidth / 2}px, 50px) rotate(10deg)`;
+                ribbon.style.opacity = "0";
+
+                setTimeout(() => {
+                    window.location.href = "diya.html";
+                }, 1000);
+            }
+        });
+
+        ribbon.addEventListener('mousedown', () => {
+            isCutting = true;
+        });
+
+        ribbon.addEventListener('mouseup', () => {
+            isCutting = false;
+        });
+    </script>
+</body>
+
+</html>

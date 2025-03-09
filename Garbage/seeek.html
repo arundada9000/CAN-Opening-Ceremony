@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ribbon Cutting Effect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            overflow: hidden;
+        }
+
+        .ribbon {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(45deg, #ff0000, #cc0000);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .ribbon-half {
+            position: absolute;
+            top: 50%;
+            height: 80px;
+            background: linear-gradient(45deg, #ff0000, #cc0000);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: rotate(180deg);
+        }
+
+        .ribbon-half.left {
+            left: 0;
+            transform-origin: left center;
+            animation: fall-left 1.5s ease-in forwards;
+        }
+
+        .ribbon-half.right {
+            right: 0;
+            transform-origin: right center;
+            animation: fall-right 1.5s ease-in forwards;
+        }
+
+        @keyframes fall-left {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(90deg);
+            }
+        }
+
+        @keyframes fall-right {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(-90deg);
+            }
+        }
+
+        .logo-wrapper {
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        img {
+            pointer-events: none;
+            tab-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logo-wrapper">
+        <img src="./images/CAN logo.png" height="120px" width="120px" alt="can logo">
+    </div>
+    <div class="ribbon"></div>
+    <script>
+        const ribbon = document.querySelector('.ribbon');
+
+        let isCutting = false;
+        let cutStartX = 0;
+
+        ribbon.addEventListener('mousedown', startCut);
+        ribbon.addEventListener('mousemove', performCut);
+        ribbon.addEventListener('mouseup', endCut);
+        ribbon.addEventListener('mouseleave', endCut);
+
+        ribbon.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startCut(e.touches[0]);
+        });
+        ribbon.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            performCut(e.touches[0]);
+        });
+        ribbon.addEventListener('touchend', endCut);
+
+        function startCut(e) {
+            isCutting = true;
+            cutStartX = e.clientX;
+        }
+
+        function performCut(e) {
+            if (isCutting) {
+                const currentX = e.clientX;
+                if (Math.abs(currentX - cutStartX) > 10) {
+                    endCut();
+                    cutRibbon(currentX);
+                }
+            }
+        }
+
+        function endCut() {
+            isCutting = false;
+        }
+
+        function cutRibbon(cutX) {
+            const rect = ribbon.getBoundingClientRect();
+            const ribbonWidth = rect.width;
+            const ribbonLeft = rect.left;
+            const cutPosition = cutX - ribbonLeft;
+
+            const ribbonLeftHalf = document.createElement('div');
+            const ribbonRightHalf = document.createElement('div');
+
+            ribbonLeftHalf.className = 'ribbon-half left';
+            ribbonRightHalf.className = 'ribbon-half right';
+
+            ribbonLeftHalf.style.width = `${cutPosition}px`;
+            ribbonRightHalf.style.width = `${ribbonWidth - cutPosition}px`;
+
+            ribbonLeftHalf.style.left = `${ribbonLeft}px`;
+            ribbonRightHalf.style.left = `${cutX}px`;
+
+            document.body.appendChild(ribbonLeftHalf);
+            document.body.appendChild(ribbonRightHalf);
+
+            ribbon.remove();
+
+            setTimeout(() => {
+                window.location.href = "seek-lamp.html";
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>
