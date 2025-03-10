@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAN Event</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* .image {
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        } */
+    </style>
+</head>
+
+<body>
+    <!-- <div class="image">
+        <img src="./images/Home page.png" alt="Home page" width="100%" height="100%"
+            onclick="window.location.href='./signature.html'">
+    </div> -->
+    <video src="./videos/Opening-vide.mp4" width="100%" height="100%"></video>
+
+    <script>
+        const video = document.querySelector('video');
+        video.addEventListener('ended', () => {
+            window.location.href = './signature.html';
+        });
+        window.addEventListener('click', () => {
+            video.play();
+        });
+
+    </script>
+</body>
+
+</html>
